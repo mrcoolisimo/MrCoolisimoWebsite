@@ -1,0 +1,170 @@
+/*GENERAL*/
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family: "Montserrat", sans-serif, 'MrRobot';
+    font-weight:500;
+}
+
+a {
+    text-decoration:none;
+    color:white;
+}
+
+ul {
+    list-style:none;
+}
+
+@media (min-width: 900px) {
+    nav{
+        display:flex;
+        justify-content:space-between;
+        padding:10px 30px;
+    }
+}
+
+@media (max-width: 900px) {
+    .container1 {
+        text-align: center;
+    }
+    .nav-links li{
+        width:30%;
+        font-size:20px;
+        justify-content:center;
+    }
+    .contact {
+        display: block;
+        width: 100%;
+        border: none;
+        padding: 14px 28px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        border-radius:0;
+        margin-top:10px;
+    }
+    
+}
+
+/*NAVBAR*/
+
+
+nav {
+    
+    background:black;
+    color:white;
+    /*!!!!*/
+    align-items:center;
+}
+
+/**TITLE**/
+
+.username {
+    font-size:40px;
+}
+
+.username .yellow{
+    transition: all 0.3s ease;
+    font-family: 'MrRobot';
+}
+
+.username .blue{
+    transition: all 0.3s ease;
+    font-family: 'MrRobot';
+}
+
+.username:hover .yellow {
+    color:rgb(187, 255, 0);
+}
+
+.username:hover .blue {
+    color:rgba(0,136,169,1);
+}
+
+/**LINKS**/
+
+.nav-links {
+    display:flex;
+    padding:0px 100px;
+}
+
+.nav-links li {
+    display:flex;
+    margin: auto 30px;
+}
+
+.nav-links li a {
+    transition:all 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color:rgb(187, 255, 0);
+}
+
+.nav-side {
+    display:flex;
+}
+.nav-side li {
+    justify-content: stretch;
+    margin-right:30px;
+}
+
+/**BUTTON**/
+
+button {
+    padding: 9px 25px;
+    background-color: rgba(0,136,169,1);
+    color:white;
+    border:none;
+    border-radius:50px;
+    cursor:pointer;
+    transition:all 0.3s ease 0s;
+}
+
+button:hover {
+    background-color: rgba(187, 255, 0,0.8);
+    color:#1b1b1b;
+}
+
+/*BODY*/
+
+.container2 {
+    background: url('/css/img/accordion.jpg') no-repeat center center/cover;
+    height:100vh;
+}
+ .highlight {
+    background-color: rgba(255, 255, 255, 0.459);
+    height:100vh;
+ }
+.plate {
+    display: flex;
+    width:50%;
+    height:100%;
+    margin:auto;
+    text-align: center;
+    vertical-align: middle;
+    flex-direction:column;
+    justify-content: space-between;
+    
+}
+.blurred {
+    backdrop-filter: blur(4px);
+    
+}
+.item1 {
+    background-color: rgba(255, 255, 255, 0.671);
+    padding: 30px;
+    border-radius: 10px;
+}
+
+/*FONT*/
+
+@font-face {
+    font-family: "MrRobot";
+    src: url("fonts/MR ROBOT.ttf");
+}
+
