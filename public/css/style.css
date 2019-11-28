@@ -133,7 +133,7 @@ button:hover {
     color:#1b1b1b;
 }
 
-/*BODY*/
+/*HOMEBODY*/
 
 .container2 {
     background: url('/css/img/accordion.jpg') no-repeat center center/cover;
@@ -162,6 +162,13 @@ button:hover {
     background-color: rgba(255, 255, 255, 0.671);
     padding: 30px;
     border-radius: 10px;
+}
+
+/*REGISTER*/
+
+.dark-bg{
+    background:rgb(90, 4, 230);
+    height:100vh;
 }
 
 /*FONT*/

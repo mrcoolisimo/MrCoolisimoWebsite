@@ -1,0 +1,23 @@
+{
+  "name": "mrcoolisimo",
+  "version": "1.0.0",
+  "description": "officialwebsite",
+  "main": "server.js",
+  "scripts": {
+    "devStart": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrcoolisimo/MrCoolisimoWebsite.git"
+  },
+  "author": "Liam York",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrcoolisimo/MrCoolisimoWebsite/issues"
+  },
+  "homepage": "https://github.com/mrcoolisimo/MrCoolisimoWebsite#readme",
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.1"
+  }
+}
