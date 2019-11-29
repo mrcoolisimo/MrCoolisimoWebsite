@@ -1,49 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel='stylesheet' href='/css/style.css'>
-    <title>Homepage</title>
-</head>
-
-<body>
-    <header>
-        <nav>
-            <div class='container1'>
-                <a class='username' href='/homepage'><span class='yellow'>Mr</span><span class='blue'>Coolisimo</span></a>
-            </div>
-            <div>
-                <ul class='nav-links'>
-                    <li><a href='/register'>Register</a></li>
-                    <li><a href='/login'>Login</a></li>
-                    <li><a href='#'>Resume</a></li>
-                </ul>
-            </div>
-            <div>
-                <a href='#'><button class='contact'>Contact</button></a>
-            </div>
-        </nav>
-    </header>
-
-<div class='dark-bg'>
 <h1>Login</h1>
-<% if (messages.error) { %>
-  <%= messages.error %>
-<% } %>
-<form action="/login" method="POST">
-  <div>
+<%- include ('./partials/messages') %>
+<form action="/users/login" method="POST">
     <label for="email">Email</label>
-    <input type="email" id="email" name="email" required>
-  </div>
-  <div>
+    <input
+      type="email"
+      name="email"
+      placeholder="Enter Email"
+    />
     <label for="password">Password</label>
-    <input type="password" id="password" name="password" required>
-  </div>
+    <input
+      type="password"
+      name="password"
+      placeholder="Enter Password"
+    />
   <button type="submit">Login</button>
 </form>
-<a href="/register">Register</a> 
-</div>
-
-</body>
+<p>
+  No Account? <a href="/users/register">Register</a>
+</p>

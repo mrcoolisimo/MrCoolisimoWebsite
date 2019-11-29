@@ -1,111 +1,68 @@
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config()
-}
+//app.js//
 
-//GETTING STARTED----------------------------------
-const express = require('express')
-const app = express()
-const bcrypt = require('bcrypt')
-const passport = require('passport')
-const flash = require('express-flash')
-const session = require('express-session')
-const methodOverride = require('method-override')
+// Basic Setup --------------------------------------
 
-app.set('view-engine', 'ejs')
+const express = require('express');
+const app = express();
+const expressLayouts = require('express-ejs-layouts');
+const mongoose = require('mongoose');
+const passport = require('passport');
 
-// Create a passport by calling upon that file we made
-const initializePassport = require('./passportConfig')
-initializePassport(
-    passport,
-    // Identify user based on email and ID
-    email => users.find(user => user.email === email),
-    id => users.find(user => user.id === id)
-  )
+//Redirect messages
+const flash = require('connect-flash');
+const session = require('express-session');
 
-// Start looking in this directory
-app.use(express.static(__dirname + '/public'));
-// Allows express to read from HTML inputs
-app.use(express.urlencoded({ extended:false }))
-// Shows messages?
-app.use(flash())
-// Secures user session
+// Port Config
+const PORT = process.env.PORT || 5000;
+
+// DB Config 
+const db = require('./config/keys').MongoURI
+mongoose.connect(db, {useNewUrlParser: true})
+    .then(() => console.log('MongoDB Connected'))
+    .catch(err => console.log(err))
+
+// Passport Config
+require('./config/passport')(passport);
+
+// EJS
+app.use(expressLayouts);
+app.set('view engine', 'ejs');
+
+// Bodyparser -- Lets us get data from html files
+app.use(express.urlencoded({ extended: false}))
+
+// Creating the redirect message ----------------------
+
+// Express Session
 app.use(session({
-    // Create secret session key
-    secret: process.env.SESSION_SECRET,
-    // Save if nothing changed? 
-    resave: false,
-    // Save empty value?
-    saveUninitialized: false
-}))
-// Creates authentication
-app.use(passport.initialize())
-app.use(passport.session())
-app.use(methodOverride('_method'))
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true,
+  }));
 
-//We're using this in place of a database. Resets everytime we reset the server.
-const users = []
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
-// ROUTES-------------------------------------------
-app.get('/', checkAuthenticated, (req,res) => {
-    res.render('index.ejs',{ name: req.user.name })
-});
-app.get('/login', checkNotAuthenticated, (req,res) => {
-    res.render('login.ejs')
-});
-app.get('/register', (req,res) => {
-    res.render('register.ejs')
-});
-app.get('/homepage', (req,res) => { 
-    res.render('homepage.ejs')
+// Connect Flash
+app.use(flash());
+
+// Global vars
+app.use((req,res,next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    next();
 });
 
-// POSTS---------------------------------------------
-app.post('/register', async (req,res) => {
-    try {
-        //What was in the password field? Then hash it
-        const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        users.push({
-            // Databases usually do this for you
-            id: Date.now().toString(),
-            //What was in the name field?
-            name: req.body.name,
-            //Email field?
-            email: req.body.email,
-            password: hashedPassword
-        })
-        res.redirect('/login')
-    } catch (e) {
-    res.redirect('/register')    
-    }
-    console.log(users)   
-})
+// Actual Server --------------------------------------
 
-app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-    successRedirect:'/homepage',
-    failureRedirect: '/login',
-    failureFlash: true
-}))
+app.use(express.static(__dirname + '/public'));
 
-// LOGOUT----------------------------------------------
-app.delete('/logout', (req,res) => {
-    req.logout()
-    res.redirect('/login')
-})
+// ROUTES
+app.use('/', require('./routes/index')); 
+app.use('/', require('./routes/homepage')); 
+app.use('/users', require('./routes/users'));
 
-// CHECKS----------------------------------------------
-function checkAuthenticated(req,res,next) {
-    if(req.isAuthenticated()) {
-        return next()
-    }
-    res.redirect('/login')
-}
+app.listen(PORT, console.log(`Server started on port ${PORT}`));
 
-function checkNotAuthenticated(req,res,next) {
-    if(req.isAuthenticated()) {
-        res.redirect('/homepage')
-    }
-    next()
-}
-
-// PORT------------------------------------------------
-app.listen(3001)
