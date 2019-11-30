@@ -164,6 +164,13 @@ button:hover {
     border-radius: 10px;
 }
 
+/*LOGIN*/
+
+.flex-double {
+    display: flex;
+}
+
+
 /*FONT*/
 
 @font-face {

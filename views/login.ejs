@@ -1,20 +1,45 @@
-<h1>Login</h1>
-<%- include ('./partials/messages') %>
-<form action="/users/login" method="POST">
-    <label for="email">Email</label>
-    <input
-      type="email"
-      name="email"
-      placeholder="Enter Email"
-    />
-    <label for="password">Password</label>
-    <input
-      type="password"
-      name="password"
-      placeholder="Enter Password"
-    />
-  <button type="submit">Login</button>
-</form>
-<p>
-  No Account? <a href="/users/register">Register</a>
-</p>
+<body>
+  <div class='container2'>
+  <div class='highlight'>
+  <div class='plate'>
+  <div></div>
+    <div class='blurred'>
+    <div class='item1'>
+      <h1 class='form-title'>Login</h1>
+        <%- include ('./partials/messages') %>
+        <form action="/users/login" method="POST">
+
+          <div class='flex-double'>
+            <label class='box1' for="email">Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter Email"
+            />
+          </div>
+          <div class='flex-double'>
+            <label class for="password">Password</label>
+
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter Password"
+            />
+          </div>
+            
+          <button class='btn-alt' type="submit">Login</button>
+
+
+        </form>
+        <p class='form-title'>
+          No Account? <a class='a-alt' href="/users/register">Register</a>
+        </p>
+
+    </div>
+    </div>
+  <div></div>
+  </div>
+  </div>
+  </div>
+</body>
+
