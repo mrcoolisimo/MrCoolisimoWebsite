@@ -3,17 +3,17 @@
 // Basic Setup --------------------------------------
 
 const express = require('express');
-const app = express();
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const passport = require('passport');
-
-//Redirect messages
+const socket = require('socket.io')
 const flash = require('connect-flash');
 const session = require('express-session');
 
-// Port Config
+// Server Config
+const app = express();
 const PORT = process.env.PORT || 5000;
+const server = app.listen(PORT, console.log(`Server started on port ${PORT}`));
 
 // DB Config 
 const db = require('./config/keys').MongoURI
@@ -24,12 +24,13 @@ mongoose.connect(db, {useNewUrlParser: true})
 // Passport Config
 require('./config/passport')(passport);
 
-// EJS
+// Enable EJS readability
 app.use(expressLayouts);
-app.set('view engine', 'ejs');
+app.set('view engine', 'ejs'); 
 
 // Bodyparser -- Lets us get data from html files
 app.use(express.urlencoded({ extended: false}))
+
 
 // Creating the redirect message ----------------------
 
@@ -55,13 +56,33 @@ app.use((req,res,next) => {
     next();
 });
 
+// SOCKETS ------------------------------
+
+const io = socket(server);
+
+// Handle Chat Event -- Listens for event called "connection"
+io.on('connection', (socket) => {
+     // Socket ID is a unique code for each connected user assigned upon connecting
+     console.log('made socket connection',socket.id);
+ 
+ 
+     socket.on('chat', function(data){
+         io.sockets.emit('chat', data);
+     });
+ 
+     socket.on('typing', function(data){
+         socket.broadcast.emit("typing", data);
+     });
+ });
+
 // Actual Server --------------------------------------
 
+// Look here for ejs pages
 app.use(express.static(__dirname + '/public'));
 
 // ROUTES
 app.use('/', require('./routes/index'));  
 app.use('/users', require('./routes/users'));
 
-app.listen(PORT, console.log(`Server started on port ${PORT}`));
+
 
