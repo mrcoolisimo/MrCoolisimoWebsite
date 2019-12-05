@@ -1,12 +1,120 @@
-<div id="mario-chat">
-    <h2>Mr. Coolisimo's Chat App</h2>
-    <div id="chat-window">
-        <div id="output"></div>
-        <div id="feedback"></div>
+<div class='container3'>
+    <div class='highlight-dark'>
+        <div class='plate-chat'>
+            <div></div>
+                <div class = 'blurred-chat'>
+                    <div class = 'item1-chat'>
+                        <h2>Mr. Coolisimo's Chat App</h2>
+
+                        <div id="chat-window">
+                            <div id="output"></div>
+                            <div id="feedback"></div>
+                        </div>
+                        <input type="hidden" id="handle" type="text" value= <%= name %> />
+                        <div class='center'>
+                            <textarea id="message" rows="6" wrap="soft" placeholder="Message"></textarea> 
+                            <br>
+                            <button id="send">Send</button>
+                        </div>
+                    </div>
+                </div>
+            <div></div>
+        </div>
     </div>
-    <input id="handle" type="text" placeholder="Handle" />
-    <input id="message" type="text" placeholder="Message" />
-    <button id="send">Send</button>
 </div>
-<!--Our Chat App-->
-<script src="chat.js"></script>
+     
+    
+<script>
+// Make Connection -- different socket var, connecting to this address
+var socket = io.connect('http://localhost:5000'); 
+
+// Queru DOM
+var message = document.getElementById('message'),
+    handle = document.getElementById('handle'),
+    btn = document.getElementById('send'),
+    output = document.getElementById('output'),
+    feedback = document.getElementById('feedback'),
+    chatWindow = document.querySelector('#chat-window'),
+    timeout;
+
+function updateScroll(){
+    chatWindow.scrollTop = chatWindow.scrollHeight - chatWindow.clientHeight;
+};
+
+// Emit events
+btn.addEventListener('click', function(){
+    socket.emit('chat', {
+        message: message.value,
+        handle: handle.value
+    });
+    message.value = "";
+});
+
+message.addEventListener('keypress', function(){
+    socket.emit("typing", handle.value);
+})
+
+//Listen for events
+socket.on('chatHistory', (data) => {
+    console.log(data);
+    if(data.length){
+        for(var x=0;x < data.length;x++){
+            output.innerHTML += '<p><span class="handle">' + data[x].handle + ' </span>' + '<span class="message-input">' + data[x].message + '</span><p>';
+        }
+    }
+    updateScroll();
+});
+
+socket.on('chat', function(data){
+    feedback.innerHTML = "";
+    output.innerHTML += '<p><span class="handle">' + data.handle + ' </span>' + '<span class="message-input">' + data.message + '</span><p>';
+    updateScroll();
+});
+
+// "...is typing" ---------------------------------------
+
+function timeoutFunction() {
+socket.emit("typing", false);
+}
+
+
+message.addEventListener('keyup',function(){
+    socket.emit('typing', handle.value);
+    clearTimeout(timeout)
+    timeout = setTimeout(timeoutFunction, 3000)
+    })
+
+
+socket.on('typing', function(data){
+    if (data) {
+        feedback.innerHTML = '<p><em>' + data + ' is typing...</em></p>';
+
+        if(chatWindow.scrollTop != chatWindow.scrollHeight - chatWindow.clientHeight){
+            updateScroll();
+        }
+    } else {
+        feedback.innerHTML = ''
+    }
+});
+
+/*socket.on('typing', function(data){
+    feedback.innerHTML = '<p><em>' + data + ' is typing a message...</em</p>'; 
+    updateScroll();
+});*/
+
+// Press enter instead of clicking submit
+
+document.onkeypress = keyPress;
+
+function keyPress(e){
+    var x = e || window.event;
+    var key = (x.keyCode || x.which);
+    if(key == 13 || key == 3){
+        socket.emit('chat', {
+            message: message.value,
+            handle: handle.value
+        });
+        message.value = "";
+    }
+}  
+</script>

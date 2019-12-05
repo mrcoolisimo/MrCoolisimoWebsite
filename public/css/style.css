@@ -1,15 +1,20 @@
 /*GENERAL*/
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
 * {
     box-sizing:border-box;
     margin:0;
     padding:0;
-    font-family: "Montserrat", sans-serif, 'MrRobot';
+    
     font-weight:500;
 }
 
+body {
+    font-family: "Montserrat", sans-serif, 'MrRobot';
+}
+ 
 a {
     text-decoration:none;
     color:white;
@@ -47,13 +52,24 @@ ul {
         border-radius:0;
         margin-top:10px;
     }
+    .item1 {
+        padding:30px 10px !important;
+    }
     .flex-double{
         flex-direction: column;
     }
+    .item1-chat{
+        padding:30px 10px !important;
+    }
+}
+
+/*STYLE*/
+
+.bold {
+    font-style: bold;
 }
 
 /*NAVBAR*/
-
 
 nav {
     
@@ -141,8 +157,16 @@ button:hover {
     background: url('/css/img/accordion.jpg') no-repeat center center/cover;
     height:100vh;
 }
+.container3 {
+    background: url('/css/img/ttyd.jpg') no-repeat center center/cover;
+    height:100vh;
+}
  .highlight {
     background-color: rgba(255, 255, 255, 0.459);
+    height:100vh;
+ }
+ .highlight-dark {
+    background-color: rgba(71, 71, 71, 0.459);
     height:100vh;
  }
 .plate {
@@ -154,9 +178,22 @@ button:hover {
     vertical-align: middle;
     flex-direction:column;
     justify-content: space-between;
-    
+}
+.plate-chat {
+    display: flex;
+    width:90%;
+    height:100%;
+    margin:auto;
+    vertical-align: middle;
+    flex-direction:column;
+    justify-content: space-between;
+    overflow:auto;
 }
 .blurred {
+    backdrop-filter: blur(4px);
+    
+}
+.blurred-chat {
     backdrop-filter: blur(4px);
     
 }
@@ -165,7 +202,57 @@ button:hover {
     padding: 30px;
     border-radius: 10px;
 }
+.item1-chat {
+    background-color: rgba(208, 236, 243, 0.671);
+    padding: 50px;
+    border-radius: 10px;
+}
+.item1-chat h2 {
+    text-align: center;
+}
 
+.mrcool-chat {
+    padding: 30px;
+    border-radius: 10px;
+    overflow:hidden;
+    overflow-y: auto;
+    word-wrap: break-word;
+    
+}
+#chat-window {
+    font-family:'Roboto';
+    font-size:20px;
+    height: 400px;
+    overflow: auto;
+}
+#chat-window p{
+    padding:2px;
+}
+#output {
+    border: rgba(15, 100, 121, 0.671);;
+    padding:8px;
+    word-wrap: break-word;
+}
+#message{
+    width: 100%;
+    height: 100%; 
+    box-sizing: border-box;
+}
+#send{
+    width:100%;
+}
+.handle{
+    color:black;
+}
+.message-input{
+    color:rgb(4, 57, 155);
+}
+.center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
 /*REGISTER*/
 
 .dark-bg{
@@ -216,11 +303,6 @@ button:hover {
     color:rgb(187, 255, 0);
 }
 
-#chat-window{
-    height: 400px;
-    overflow: auto;
-    background: #f9f9f9;
-}
 /*FONT*/
 
 @font-face {

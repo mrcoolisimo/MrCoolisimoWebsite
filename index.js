@@ -5,8 +5,9 @@
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
+const mongo = require('mongodb').MongoClient; 
 const passport = require('passport');
-const socket = require('socket.io')
+const socket = require('socket.io');
 const flash = require('connect-flash');
 const session = require('express-session');
 
@@ -60,20 +61,41 @@ app.use((req,res,next) => {
 
 const io = socket(server);
 
-// Handle Chat Event -- Listens for event called "connection"
-io.on('connection', (socket) => {
-     // Socket ID is a unique code for each connected user assigned upon connecting
-     console.log('made socket connection',socket.id);
- 
- 
-     socket.on('chat', function(data){
-         io.sockets.emit('chat', data);
-     });
- 
-     socket.on('typing', function(data){
-         socket.broadcast.emit("typing", data);
-     });
- });
+//Connect Mongo
+mongo.connect('mongodb://localhost/MRCOOLISIMOCHAT', (err, client) => {
+    if (err) throw err;
+    console.log('MongoDB Connected');
+
+    // Handle Chat Event -- Listens for event called "connection"
+    io.on('connection', (socket) => {
+        // Socket ID is a unique code for each connected user assigned upon connecting
+        console.log('made socket connection',socket.id);
+
+
+        const chat = client.db('MRCOOLISIMOCHAT');
+
+        //Chat History
+        chat.collection('chats').find().limit(100).sort({_id:1}).toArray((err,res) => {
+            if (err) throw err;
+            // Emit messages
+            socket.emit('chatHistory', res);
+            // console.log(res);
+        });
+
+        socket.on('chat', function(data){
+            io.sockets.emit('chat', data);
+            
+
+            console.log('message received', data);
+
+            chat.collection('chats').insertOne(data);
+        });
+
+        socket.on('typing', function(data){
+            socket.broadcast.emit("typing", data);
+        });
+    });
+});
 
 // Actual Server --------------------------------------
 
@@ -83,6 +105,4 @@ app.use(express.static(__dirname + '/public'));
 // ROUTES
 app.use('/', require('./routes/index'));  
 app.use('/users', require('./routes/users'));
-
-
 

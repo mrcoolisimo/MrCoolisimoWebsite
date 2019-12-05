@@ -9,9 +9,8 @@ router.get('/dashboard', ensureAuthenticated, (req,res) =>
     res.render('dashboard', {
         name: req.user.name
     }));
-router.get('/chat', ensureAuthenticated, (req,res) => 
-    res.render('chat', {
-        name: req.user.name
-    }));
+router.get('/chat', ensureAuthenticated, (req,res) => { 
+    res.render('chat', {name: req.user.name})
+})
 
 module.exports = router;
